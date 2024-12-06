@@ -27,11 +27,6 @@ export class TasksService {
 
   updateTask(id: string, update: Task): Task {
     const taskById = this.getTaskById(id);
-
-    if (!taskById) {
-      throw new HttpException("Task not found", 404);
-    }
-
     const { id: _, ...filteredUpdate } = update;
 
     const updatedTask: Task = { id: taskById.id, ...filteredUpdate };
