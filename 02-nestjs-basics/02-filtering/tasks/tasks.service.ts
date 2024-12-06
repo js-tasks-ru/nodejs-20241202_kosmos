@@ -40,5 +40,25 @@ export class TasksService {
     status?: TaskStatus,
     page?: number,
     limit?: number,
-  ): Task[] {}
+    sortBy?: keyof Task,
+  ): Task[] {
+    let response = this.tasks;
+
+    if (status) {
+      response = response.filter((task) => task.status === status);
+    }
+
+    if (sortBy) {
+      const intl = new Intl.Collator();
+      response = response.sort((prev, curr) =>
+        intl.compare(prev[sortBy], curr[sortBy]),
+      );
+    }
+
+    if (page && limit) {
+      return response.slice((page - 1) * limit, limit);
+    }
+
+    return response;
+  }
 }
