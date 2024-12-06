@@ -1,6 +1,8 @@
 import { HttpException, Injectable, NotFoundException } from "@nestjs/common";
 import { Task } from "./task.model";
 import { v4 as uuidv4 } from "uuid";
+import { UpdateTaskDTO } from "./dto/update-task.dto";
+import { CreateTaskDTO } from "./dto/create-task.dto";
 
 @Injectable()
 export class TasksService {
@@ -19,17 +21,16 @@ export class TasksService {
     return task;
   }
 
-  createTask(task: Task): Task {
-    task.id = uuidv4();
+  createTask(createTaskDTO: CreateTaskDTO): Task {
+    const task: Task = { id: uuidv4(), ...createTaskDTO };
     this.tasks.push(task);
     return task;
   }
 
-  updateTask(id: string, update: Task): Task {
+  updateTask(id: string, update: UpdateTaskDTO): Task {
     const taskById = this.getTaskById(id);
-    const { id: _, ...filteredUpdate } = update;
 
-    const updatedTask: Task = { id: taskById.id, ...filteredUpdate };
+    const updatedTask: Task = { ...taskById, ...update };
 
     this.tasks = this.tasks.map((task) => {
       if (task.id === id) {
@@ -43,7 +44,6 @@ export class TasksService {
 
   deleteTask(id: string): Task {
     const taskById = this.getTaskById(id);
-
     this.tasks = this.tasks.filter((task) => task.id !== id);
     return taskById;
   }
