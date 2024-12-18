@@ -3,9 +3,10 @@ import { TasksController } from "./tasks.controller";
 import { TasksService } from "./tasks.service";
 import { UsersModule } from "../users/users.module";
 import { NotificationService } from "../providers/NotificationService";
-import { SenderEmail } from "../providers/sender-email.class";
-import { SMSGateway } from "../providers/sms-getway.class";
+
 import { LoggerService } from "../providers/logger.service";
+import { SenderEmailService } from "../providers/sender-email.service";
+import { SMSGatewayService } from "../providers/sms-getway.service";
 
 @Module({
   imports: [UsersModule],
@@ -13,16 +14,9 @@ import { LoggerService } from "../providers/logger.service";
   providers: [
     TasksService,
     LoggerService,
-    {
-      provide: NotificationService,
-      useFactory: (loggerService: LoggerService) => {
-        return new NotificationService(
-          new SenderEmail(loggerService),
-          new SMSGateway(loggerService),
-        );
-      },
-      inject: [LoggerService],
-    },
+    SenderEmailService,
+    SMSGatewayService,
+    NotificationService,
   ],
 })
 export class TasksModule {}
