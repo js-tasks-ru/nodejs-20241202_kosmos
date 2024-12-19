@@ -4,9 +4,19 @@ import { TasksService } from "./tasks.service";
 import { UsersModule } from "../users/users.module";
 import { NotificationService } from "../providers/NotificationService";
 
+import { LoggerService } from "../providers/logger.service";
+import { SenderEmailService } from "../providers/sender-email.service";
+import { SMSGatewayService } from "../providers/sms-getway.service";
+
 @Module({
-  imports: [],
+  imports: [UsersModule],
   controllers: [TasksController],
-  providers: [TasksService],
+  providers: [
+    TasksService,
+    LoggerService,
+    SenderEmailService,
+    SMSGatewayService,
+    NotificationService,
+  ],
 })
 export class TasksModule {}
