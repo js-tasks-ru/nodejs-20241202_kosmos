@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  HttpException,
 } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
@@ -18,20 +19,30 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {}
+  create(@Body() createTaskDto: CreateTaskDto) {
+    return this.tasksService.create(createTaskDto);
+  }
 
   @Get()
-  findAll() {}
+  findAll() {
+    return this.tasksService.findAll();
+  }
 
   @Get(":id")
-  findOne(@Param("id", ObjectIDPipe) id: ObjectId) {}
+  findOne(@Param("id", ObjectIDPipe) id: ObjectId) {
+    return this.tasksService.findOne(id);
+  }
 
   @Patch(":id")
   update(
     @Param("id", ObjectIDPipe) id: ObjectId,
     @Body() updateTaskDto: UpdateTaskDto,
-  ) {}
+  ) {
+    return this.tasksService.update(id, updateTaskDto);
+  }
 
   @Delete(":id")
-  remove(@Param("id", ObjectIDPipe) id: ObjectId) {}
+  remove(@Param("id", ObjectIDPipe) id: ObjectId) {
+    return this.tasksService.remove(id);
+  }
 }
